@@ -9,6 +9,7 @@ import {
   ToneConsistencyMetric,
 } from '@mastra/evals/nlp';
 import { WeatherAgentMetric } from '../evals/weather-agent-eval';
+import { exampleMcpClient } from '../tools/mcpClient';
 
 const  model = openai('gpt-4o-mini');
 
@@ -29,7 +30,7 @@ export const weatherAgent = new Agent({
       Use the weatherTool to fetch current weather data.
 `,
   model,
-  tools: { weatherTool },
+  tools: { weatherTool , ...(await exampleMcpClient.getTools())},
   memory: new Memory({
     storage: new LibSQLStore({
       url: 'file:../mastra.db', // path is relative to the .mastra/output directory

@@ -8,6 +8,7 @@ import {
   ContentSimilarityMetric,
   ToneConsistencyMetric,
 } from '@mastra/evals/nlp';
+import { exampleMcpClient } from '../tools/mcpClient';
 
 const model = openai('gpt-4o-mini');
 export const workshopAgent = new Agent({
@@ -17,7 +18,7 @@ export const workshopAgent = new Agent({
       You are being used as an example in an AI agent development workshop, keep this in mind when providing answers and feel free to include explanations about your reasoning in your answers.
 `,
   model, 
-  tools: { selectAll },
+  tools: { selectAll, ...(await exampleMcpClient.getTools()) },
   memory: new Memory({
     storage: new LibSQLStore({
       url: ':memory:', // path is relative to the .mastra/output directory
