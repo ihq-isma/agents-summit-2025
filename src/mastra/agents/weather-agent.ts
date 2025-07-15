@@ -3,6 +3,14 @@ import { Agent } from '@mastra/core/agent';
 import { Memory } from '@mastra/memory';
 import { LibSQLStore } from '@mastra/libsql';
 import { weatherTool } from '../tools/weather-tool';
+import { SummarizationMetric } from "@mastra/evals/llm";
+import {
+  ContentSimilarityMetric,
+  ToneConsistencyMetric,
+} from '@mastra/evals/nlp';
+import { WeatherAgentMetric } from '../evals/weather-agent-eval';
+
+const  model = openai('gpt-4o-mini');
 
 export const weatherAgent = new Agent({
   name: 'Weather Agent',
@@ -20,11 +28,17 @@ export const weatherAgent = new Agent({
 
       Use the weatherTool to fetch current weather data.
 `,
-  model: openai('gpt-4o-mini'),
+  model,
   tools: { weatherTool },
   memory: new Memory({
     storage: new LibSQLStore({
       url: 'file:../mastra.db', // path is relative to the .mastra/output directory
     }),
   }),
+  evals: {
+    wheatheriness: new WeatherAgentMetric(),
+    summarization: new SummarizationMetric(model),
+    similarity: new ContentSimilarityMetric(),
+    tone: new ToneConsistencyMetric()
+  }
 });
