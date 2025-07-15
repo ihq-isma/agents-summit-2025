@@ -22,6 +22,8 @@
     "@mastra/libsql": "^0.11.0",
     "@mastra/loggers": "^0.10.3",
     "@mastra/memory": "^0.11.2",
+    "promised-sqlite3": "^2.1.0",
+    "sqlite3": "^5.1.7",
     "zod": "^3.25.76"
   },
   "devDependencies": {

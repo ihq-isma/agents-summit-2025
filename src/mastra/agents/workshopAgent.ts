@@ -2,6 +2,7 @@ import { openai } from '@ai-sdk/openai';
 import { Agent } from '@mastra/core/agent';
 import { Memory } from '@mastra/memory';
 import { LibSQLStore } from '@mastra/libsql';
+import { selectAll } from '../tools/databaseTools';
 
 export const workshopAgent = new Agent({
   name: 'Workshop Agent',
@@ -10,7 +11,7 @@ export const workshopAgent = new Agent({
       You are being used as an example in an AI agent development workshop, keep this in mind when providing answers and feel free to include explanations about your reasoning in your answers.
 `,
   model: openai('gpt-4o-mini'),
-  tools: {},
+  tools: { selectAll },
   memory: new Memory({
     storage: new LibSQLStore({
       url: ':memory:', // path is relative to the .mastra/output directory
